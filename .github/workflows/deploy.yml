@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  deploy:
+  setup-and-deploy:
+    name: Setup & Deploy App
     runs-on: self-hosted
 
     steps:
@@ -16,8 +17,33 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Restart with PM2
+    - name: Start App with PM2
       run: |
-        pm2 delete my-app || true
-        pm2 start app.js --name my-app
-        pm2 save
+        pm2 delete my-app || true                 
+        pm2 start app.js --name my-app           
+        pm2 save                                  
+
+  verify-app:
+
+    name: Verify App Status
+    runs-on: self-hosted
+    needs: setup-and-deploy
+    steps:
+    - name: Wait for app to fully start
+      run: sleep 3                                
+
+    - name: Check App Response (curl)
+      run: |
+        echo " Sending request to http://localhost:3000"
+        if curl -f http://localhost:3000; then
+          echo " Response received!"
+          echo "App is running successfully!"
+        else
+          echo " App did not respond as expected!"
+          exit 1
+        fi
+
+    - name:  Show PM2 App Status
+      run: |
+        echo " Checking PM2 status for 'my-app'"
+        pm2 show my-app
