@@ -1,0 +1,23 @@
+name: PM2 Node App Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Restart with PM2
+      run: |
+        pm2 delete my-app || true
+        pm2 start app.js --name my-app
+        pm2 save
