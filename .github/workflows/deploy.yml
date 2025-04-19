@@ -24,10 +24,10 @@ jobs:
         pm2 save                                  
 
   verify-app:
-
     name: Verify App Status
     runs-on: self-hosted
     needs: setup-and-deploy
+
     steps:
     - name: Wait for app to fully start
       run: sleep 3                                
@@ -43,7 +43,7 @@ jobs:
           exit 1
         fi
 
-    - name:  Show PM2 App Status
+    - name: Show PM2 App List
       run: |
-        echo " Checking PM2 status for 'my-app'"
-        pm2 show my-app
+        echo " Listing all PM2 processes"
+        pm2 list
