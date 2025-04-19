@@ -43,7 +43,7 @@ NodeApp_pm2/
 ```
 
 ## Workflow Diagram: 
-
+![alt text](pm2appdeploy.svg)
 
 ---
 ## Install all dependencies: 
